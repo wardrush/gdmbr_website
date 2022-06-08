@@ -1,0 +1,88 @@
+<head>
+	<title> Ward's Location </title>
+    <meta name="viewport" content="initial-scale=1,maximum-scale=1,user-scalable=no">
+    <meta http-equiv="refresh" content="30">
+    <link href="https://api.mapbox.com/mapbox-gl-js/v2.8.1/mapbox-gl.css" rel="stylesheet">
+    <script src="https://api.mapbox.com/mapbox-gl-js/v2.8.1/mapbox-gl.js"></script>
+	<style>
+		.container {
+			max-width: 70%;
+			max-height: 50%;
+			margin-left: auto;
+			margin-right: auto;
+		}
+
+	</style>
+</head>
+
+<body>
+	<div class="container">
+		<font face="verdana" size='7'>Ward's 2022 Tour Divide</font> <br/><br/>
+		<font face="verdana" size='4'>Alt Link:</font>
+		<a href="https://maps.findmespot.com/s/R3JP">Here</a>
+		<font face="verdana" size='4'>(Note: Will not update until June 9)</font>
+		<br/><br/>
+		<div id='map' style='width: 95%; height:700px;'></div><br/><br/>
+		<font face="verdana" size='5'>Journey Details</font> <br/><br/>
+		<div id='details' style='width: 95%; height:700px;'>
+		    <ul>
+		        <li><b>Alternative Webpage:</b>
+		            <ul>https://maps.findmespot.com/s/R3JP</ul></li><br>
+		        <li><b>Last Updated Location:</b>
+		            <ul>{{ data.current_lat }}&#730, {{ data.current_long }}&#730</ul></li><br>
+		        <li><b>Last Recieved GPS Update (UTC):</b>
+		            <ul>{{ data.recent_update_time.strftime("%m/%d/%Y, %H:%M:%S") }}</ul>
+		            <ul>(Note: My GPS tracker will automatically pause when I am still for more than a few minutes)</ul></li><br>
+		        <li><b>Last Site Refresh (UTC):</b>
+		            <ul>{{ data.site_refresh_time.strftime("%m/%d/%Y, %H:%M:%S") }}</ul></li>
+		    </ul>
+		</div>
+	</div>
+
+    <script>
+	mapboxgl.accessToken = "{{ data.mapbox_access_token }}";
+    const map = new mapboxgl.Map({
+        container: 'map',
+        style: 'mapbox://styles/mapbox/satellite-streets-v11',
+        center: [-109, 41],
+        zoom: 4
+    });
+
+    map.on('load', () => {
+        map.addSource('route', {
+            'type': 'geojson',
+            'data': {
+                'type': 'Feature',
+                'properties': {},
+                'geometry': {
+                    'type': 'LineString',
+                    'coordinates': {{ data.gdmbr_route_data }}
+                }
+            }
+        });
+        map.addLayer({
+            'id': 'route',
+            'type': 'line',
+            'source': 'route',
+            'layout': {
+                'line-join': 'round',
+                'line-cap': 'round'
+            },
+            'paint': {
+                'line-color': '#08AFFB',
+                'line-width': 7
+            }
+        });
+
+        // fullscreen button
+		map.addControl(new mapboxgl.FullscreenControl());
+
+		// display a blue marker
+		var marker = new mapboxgl.Marker()
+  			.setLngLat([{{ data.current_long }}, {{ data.current_lat }}])
+  			.addTo(map);
+    });
+    </script>
+
+
+</html>
