@@ -143,7 +143,7 @@ def get_route_data():
     # Create function that returns the lat longs correctly formatted for MapBox
     # MapBox accepts list of lists
     # Reads CSV data stored in GDMBR-2021_v2_10k-point.csv
-    filepath = os.path.join("/home", "wardrush", "mysite", "data", "GDMBR-2021_v2_full-route.csv")
+    filepath = os.path.join("/home", "wardrush", "mysite", "data", "GDMBR-2022_v2.csv")
     df = pd.read_csv(filepath)
     route_longs = df['Long'].to_list()
     route_lats = df['Lat'].to_list()

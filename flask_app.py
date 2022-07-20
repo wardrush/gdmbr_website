@@ -31,7 +31,7 @@ def handle_500():
 
 @app.route('/',methods=['GET','POST'])
 def my_maps():
-  return render_template('index2.html', data=data)
+  return render_template('formatted.html', data=data)
 
 if __name__ == '__main__':
     app.run(debug=False)
